@@ -79,7 +79,7 @@ function getOffer() {
     "checkout": `${getRandomItem(OFFER_TIMEOUT_LIST)}`,
     "features": getRandomItems(OFFER_FEATURES_LIST),
     "description": `${FORM_OFFER_DESCRIPTION.placeholder}`,
-    "photos": getRandomItems(OFFER_PHOTOS),
+    "photos": getRandomItems(OFFER_PHOTOS)
   };
 }
 
@@ -90,6 +90,7 @@ function createAd(index, numbersArray) {
   ad["offer"] = getOffer(ad["offer"]);
   ad["location"] = getLocation(ad["location"]);
   ad.offer['address'] = ad.location['x'] + ', ' + ad.location['y'];
+
   return ad;
 }
 
@@ -100,12 +101,11 @@ for (let i = 0; i <= (OBJECTS_QUANTITY - 1); i++) {
 document.querySelector('.map').classList.remove('map--faded');
 function renderPin(ad) {
   let pinElement = PIN_TEMPLATE_ITEM.cloneNode(true);
-  let pinImg = PIN_TEMPLATE_ITEM.querySelector('img');
+  let pinImg = pinElement.querySelector('img');
   pinElement.style.left = `${+ad.location['x'] - 25}px`;
   pinElement.style.top = `${+ad.location['y'] - 70}px`;
   pinImg.src = `${ad["author"].avatar}`;
   pinImg.alt = `${ad["offer"].title}`;
-
   return pinElement;
 }
 
