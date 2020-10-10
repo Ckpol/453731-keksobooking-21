@@ -2,7 +2,6 @@
 
 const FORM_OFFER = document.querySelector('.ad-form');
 
-// const FORM_OFFER_ELEMENTS = FORM_OFFER.querySelectorAll('.ad-form__element');
 const FORM_OFFER_TITLE = FORM_OFFER.querySelector('#title');
 const FORM_OFFER_PRICE = FORM_OFFER.querySelector('#price');
 
@@ -24,27 +23,27 @@ const OFFER_GUEST = ['для 3 гостей', 'для 2 гостей', 'для 1
 const OFFER_TIMEIN_LIST = ['После 12', 'После 13', 'После 14'];
 const OFFER_TIMEOUT_LIST = ['Выезд до 12', 'Выезд до 13', 'Выезд до 14'];
 const OFFER_FEATURES_LIST = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-const OFFER_PHOTOS = ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"];
+const OFFER_PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
 function rollRandom(min, max, n) {
-  let collection = new Set();
+  const collection = new Set();
   while (collection.size < n) {
     collection.add('0' + Math.floor(min + Math.random() * (max)));
   }
   return Array.from(collection);
 }
 
-let randomNumbers = rollRandom(MIN_RANDOM_NUMBER, MAX_RANDOM_NUMBER, OBJECTS_QUANTITY);
+const randomNumbers = rollRandom(MIN_RANDOM_NUMBER, MAX_RANDOM_NUMBER, OBJECTS_QUANTITY);
 
 function getRandomItem(arr) {
-  let result = Math.floor(Math.random() * arr.length);
+  const result = Math.floor(Math.random() * arr.length);
   return arr[result];
 
 }
 
 function getRandomItems(arr) {
-  let result = [];
-  let rolls = Math.floor(1 + Math.random() * arr.length);
+  const result = [];
+  const rolls = Math.floor(1 + Math.random() * arr.length);
 
   for (let i = 0; i < rolls; i++) {
     result.push(arr[i]);
@@ -53,14 +52,14 @@ function getRandomItems(arr) {
 }
 
 function getAvatar(obj, index, numbersArray) {
-  let number = numbersArray[index];
+  const number = numbersArray[index];
   return {
     "avatar": `img/avatars/user${number}.png`
   };
 }
 
 function getLocation() {
-  let maxWidthNumber = parseInt(MAX_WIDTH_MAP, 10);
+  const maxWidthNumber = parseInt(MAX_WIDTH_MAP, 10);
   return {
     "x": `${Math.floor(1 + Math.random() * (maxWidthNumber))}`,
     "y": `${Math.floor(130 + Math.random() * (630))}`
@@ -83,13 +82,13 @@ function getOffer() {
   };
 }
 
-let ads = [];
+const ads = [];
 function createAd(index, numbersArray) {
-  let ad = {};
-  ad["author"] = getAvatar(ad["author"], index, numbersArray);
-  ad["offer"] = getOffer(ad["offer"]);
-  ad["location"] = getLocation(ad["location"]);
-  ad.offer['address'] = ad.location['x'] + ', ' + ad.location['y'];
+  const ad = {};
+  ad.author = getAvatar(ad.author, index, numbersArray);
+  ad.offer = getOffer(ad.offer);
+  ad.location = getLocation(ad.location);
+  ad.offer.address = ad.location.x + ', ' + ad.location.y;
 
   return ad;
 }
@@ -100,16 +99,16 @@ for (let i = 0; i <= (OBJECTS_QUANTITY - 1); i++) {
 
 document.querySelector('.map').classList.remove('map--faded');
 function renderPin(ad) {
-  let pinElement = PIN_TEMPLATE_ITEM.cloneNode(true);
-  let pinImg = pinElement.querySelector('img');
+  const pinElement = PIN_TEMPLATE_ITEM.cloneNode(true);
+  const pinImg = pinElement.querySelector('img');
   pinElement.style.left = `${+ad.location['x'] - 25}px`;
   pinElement.style.top = `${+ad.location['y'] - 70}px`;
-  pinImg.src = `${ad["author"].avatar}`;
-  pinImg.alt = `${ad["offer"].title}`;
+  pinImg.src = `${ad.author.avatar}`;
+  pinImg.alt = `${ad.offer.title}`;
   return pinElement;
 }
 
-let fragment = document.createDocumentFragment();
+const fragment = document.createDocumentFragment();
 for (let i = 0; i < ads.length; i++) {
   fragment.appendChild(renderPin(ads[i]));
 }
