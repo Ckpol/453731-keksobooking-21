@@ -238,7 +238,7 @@ function makePageActive(myMap, myForm1, myFormElements1, myForm2, myFormElements
   for (let i = 0; i <= (OBJECTS_QUANTITY - 1); i++) {
     ads.push(createAd(i, randomNumbers));
   }
-  
+
   const cardsFragment = document.createDocumentFragment();
   cardsFragment.appendChild(renderPinCard(ads[0]));
 
