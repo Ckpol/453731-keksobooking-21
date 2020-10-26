@@ -1,22 +1,22 @@
 'use strict';
 
-const MAP = document.querySelector('.map'); //
-const FORM_OFFER = document.querySelector('.ad-form');
+const map = document.querySelector('.map'); //
+const formOffer = document.querySelector('.ad-form');
 
-const FORM_OFFER_TITLE = FORM_OFFER.querySelector('#title');
-const FORM_OFFER_PRICE = FORM_OFFER.querySelector('#price');
+// const formOfferTitle = formOffer.querySelector('#title');
+// const formOfferPrice = formOffer.querySelector('#price');
 
-const FORM_OFFER_DESCRIPTION = FORM_OFFER.querySelector('#description');
+const formOfferDescription = formOffer.querySelector('#description');
 const OBJECTS_QUANTITY = 8;
 const MIN_RANDOM_NUMBER = 1;
 const MAX_RANDOM_NUMBER = 8;
 
-const PIN_TEMPLATE_LIST = document.querySelector('#pin');
-const PIN_TEMPLATE_ITEM = PIN_TEMPLATE_LIST
+const pinTemplateList = document.querySelector('#pin');
+const pinTemplateItem = pinTemplateList
 .content
 .querySelector('.map__pin');
-const PINS_LIST = document.querySelector('.map__pins');
-const MAX_WIDTH_MAP = getComputedStyle(PINS_LIST).width;
+const pinsList = document.querySelector('.map__pins');
+const MAX_WIDTH_MAP = getComputedStyle(pinsList).width;
 
 const OFFER_TYPES = ['Бунгало', 'Квартира', 'Дом', 'Дворец'];
 const OFFER_ROOMS = ['1 комната', '2 комнаты', '3 комнаты', '100 комнат'];
@@ -25,7 +25,7 @@ const OFFER_TIMEIN_LIST = ['после 12', 'после 13', 'после 14'];
 const OFFER_TIMEOUT_LIST = ['выезд до 12', 'выезд до 13', 'выезд до 14'];
 const OFFER_FEATURES_LIST = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const OFFER_PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-const OFFER_TITLE = ['Обычное объявление','Супер предложение','Скромное предложение',''];
+const OFFER_TITLE = ['Обычное объявление', 'Супер предложение', 'Скромное предложение', ''];
 const OFFER_PRICE = ['1000', '5000', '10000', '45000', '500000', ''];
 
 function rollRandom(min, max, n) {
@@ -80,7 +80,7 @@ function getOffer() {
     "checkin": `${getRandomItem(OFFER_TIMEIN_LIST)}`,
     "checkout": `${getRandomItem(OFFER_TIMEOUT_LIST)}`,
     "features": getRandomItems(OFFER_FEATURES_LIST),
-    "description": `${FORM_OFFER_DESCRIPTION.placeholder}`,
+    "description": `${formOfferDescription.placeholder}`,
     "photos": getRandomItems(OFFER_PHOTOS)
   };
 }
@@ -100,9 +100,9 @@ for (let i = 0; i <= (OBJECTS_QUANTITY - 1); i++) {
   ads.push(createAd(i, randomNumbers));
 }
 
-MAP.classList.remove('map--faded');
+map.classList.remove('map--faded');
 function renderPin(ad) {
-  const pinElement = PIN_TEMPLATE_ITEM.cloneNode(true);
+  const pinElement = pinTemplateItem.cloneNode(true);
   const pinImg = pinElement.querySelector('img');
   pinElement.style.left = `${+ad.location['x'] - 25}px`;
   pinElement.style.top = `${+ad.location['y'] - 70}px`;
@@ -112,7 +112,7 @@ function renderPin(ad) {
 }
 
 
-const filtersContainer = MAP.querySelector('.map__filters-container');
+const filtersContainer = map.querySelector('.map__filters-container');
 const pinTemplateCard = document.querySelector('#card');
 const pinTemplateCardItem = pinTemplateCard
 .content
@@ -193,6 +193,6 @@ for (let i = 0; i < ads.length; i++) {
   fragment.appendChild(renderPin(ads[i]));
 }
 
-PINS_LIST.appendChild(fragment);
+pinsList.appendChild(fragment);
 filtersContainer.before(cardsFragment);
 
