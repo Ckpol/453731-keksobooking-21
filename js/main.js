@@ -308,13 +308,8 @@ function onPinEnterPress(evt, ads) {
     if (evt.key === 'Enter') {
       const pins = pinsList.querySelectorAll('.map__pin');
       closeCards();
-
-      Array.from(pins).map((item, index) => {
-        if (evt.target === item) {
-          renderCards(ads[index - 1], filtersContainer);
-        }
-
-      });
+      const ind = Array.from(pins).findIndex((item) => evt.target === item);
+      renderCards(ads[ind - 1], filtersContainer);
     } else if (evt.key === ' ') {
       evt.preventDefault();
     }
@@ -322,20 +317,19 @@ function onPinEnterPress(evt, ads) {
 }
 
 function onPinClick(evt, ads) {
+  const isImage = evt.target.matches('img');
+  const isParentMainElem = evt.target.parentNode.classList.contains('map__pin--main');
+  const isParentElem = evt.target.parentNode.classList.contains('map__pin');
+  const isButtonElem = evt.target.matches('button[class="map__pin"]');
 
-  if (evt.target.matches('img') && evt.target.parentNode.classList.contains('map__pin--main')) {
+  if (isImage && isParentMainElem) {
     evt.preventDefault();
-  } else if (evt.target.matches('img') && evt.target.parentNode.classList.contains('map__pin') ||
-   evt.target.matches('button[class="map__pin"]')) {
+  } else if (isImage && isParentElem || isButtonElem) {
     const pins = pinsList.querySelectorAll('.map__pin');
     closeCards();
 
-    Array.from(pins).map((item, index) => {
-
-      if (evt.target === item || evt.target.parentNode === item) {
-        renderCards(ads[index - 1], filtersContainer);
-      }
-    });
+    const ind = Array.from(pins).findIndex((item) => (evt.target === item || evt.target.parentNode === item));
+    renderCards(ads[ind - 1], filtersContainer);
   }
 }
 
