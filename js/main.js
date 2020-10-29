@@ -15,6 +15,9 @@ const formOfferCapacity = formOffer.querySelector('#capacity');
 const formOfferDescription = formOffer.querySelector('#description');
 const formOfferAddress = formOffer.querySelector('#address');
 const formOfferElements = formOffer.querySelectorAll('fieldset');
+const formOfferRoomType = formOffer.querySelector('#type');
+const formOfferTimeIn = formOffer.querySelector('#timein');
+const formOfferTimeOut = formOffer.querySelector('#timeout');
 
 const OBJECTS_QUANTITY = 8;
 const MIN_RANDOM_NUMBER = 1;
@@ -43,6 +46,13 @@ const OFFER_FEATURES_LIST = ['wifi', 'dishwasher', 'parking', 'washer', 'elevato
 const OFFER_PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 const OFFER_TITLE = ['Обычное объявление', 'Супер предложение', 'Скромное предложение', ''];
 const OFFER_PRICE = ['1000', '5000', '10000', '45000', '500000', ''];
+
+const MIN_TYPE_ROOM_PRICE = {
+  'bungalow': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000
+};
 
 function rollRandom(min, max, n) {
   const collection = new Set();
@@ -112,7 +122,7 @@ function createAd(index, numbersArray) {
   return ad;
 }
 
-function renderPin(ad) {
+function createPin(ad) {
   const pinElement = pinTemplateItem.cloneNode(true);
   const pinImg = pinElement.querySelector('img');
   pinElement.style.left = `${+ad.location['x'] - 25}px`;
@@ -128,7 +138,7 @@ const pinTemplateCardItem = pinTemplateCard
 .content
 .querySelector('.popup');
 
-function renderPinCard(ad) {
+function createPinCard(ad) {
   const pinCardElement = pinTemplateCardItem.cloneNode(true);
   const cardTitle = pinCardElement.querySelector('.popup__title');
   const cardAddress = pinCardElement.querySelector('.popup__text--address');
@@ -195,6 +205,48 @@ function renderPinCard(ad) {
   return pinCardElement;
 }
 
+function renderPins(myElem, place) {
+  const fragment = document.createDocumentFragment();
+  if (Array.isArray(myElem)) {
+    for (let i = 0; i < myElem.length; i++) {
+      fragment.appendChild(createPin(myElem[i]));
+    }
+    place.appendChild(fragment);
+  }
+}
+
+function onCardEscPress(evt) {
+  if (evt.key === 'Escape') {
+    closeCards();
+  }
+}
+
+function onPopupCloseClick(evt) {
+  if (evt.target.matches('button[class="popup__close"]')) {
+    closeCards();
+  }
+}
+
+function renderCards(myElem, place) {
+  const fragment = document.createDocumentFragment();
+  fragment.appendChild(createPinCard(myElem));
+  place.before(fragment);
+  document.addEventListener('keydown', onCardEscPress);
+  const mapCard = map.querySelector('.map__card');
+  mapCard.addEventListener('click', onPopupCloseClick);
+}
+
+function closeCards() {
+  const mapCard = map.querySelector('.map__card');
+
+  if (mapCard) {
+    mapCard.remove();
+    mapCard.removeEventListener('click', onPopupCloseClick);
+  }
+  document.removeEventListener('keydown', onCardEscPress);
+
+}
+
 function makePageInactive(myMap, myForm1, myFormElements1, myForm2, myFormElements2) {
 
   if (!myMap.classList.contains('map--faded')) {
@@ -239,16 +291,46 @@ function makePageActive(myMap, myForm1, myFormElements1, myForm2, myFormElements
     ads.push(createAd(i, randomNumbers));
   }
 
-  const cardsFragment = document.createDocumentFragment();
-  cardsFragment.appendChild(renderPinCard(ads[0]));
+  renderPins(ads, pinsList);
+  pinsList.addEventListener('click', function (evt) {
+    onPinClick(evt, ads);
+  });
 
-  const fragment = document.createDocumentFragment();
-  for (let i = 0; i < ads.length; i++) {
-    fragment.appendChild(renderPin(ads[i]));
+  pinsList.addEventListener('keydown', function (evt) {
+    onPinEnterPress(evt, ads);
+  });
+
+}
+
+function onPinEnterPress(evt, ads) {
+  if (evt.target.matches('button[class="map__pin"]')) {
+
+    if (evt.key === 'Enter') {
+      const pins = pinsList.querySelectorAll('.map__pin');
+      closeCards();
+      const ind = Array.from(pins).findIndex((item) => evt.target === item);
+      renderCards(ads[ind - 1], filtersContainer);
+    } else if (evt.key === ' ') {
+      evt.preventDefault();
+    }
   }
+}
 
-  pinsList.appendChild(fragment);
-  filtersContainer.before(cardsFragment);
+function onPinClick(evt, ads) {
+  const isImage = evt.target.matches('img');
+  const isParentMainElem = evt.target.parentNode.classList.contains('map__pin--main');
+  const isParentElem = evt.target.parentNode.classList.contains('map__pin');
+  const isButtonElem = evt.target.matches('button[class="map__pin"]');
+
+  if (isImage && isParentMainElem) {
+    evt.preventDefault();
+  } else if (isImage && isParentElem || isButtonElem) {
+    const pins = pinsList.querySelectorAll('.map__pin');
+    closeCards();
+
+    const ind = Array.from(pins).findIndex((item) => (evt.target === item || evt.target.parentNode === item));
+    renderCards(ads[ind - 1], filtersContainer);
+  }
 }
 
 function setAddress(pin, pinWidth, pinHeight) {
@@ -275,11 +357,11 @@ mainPin.addEventListener('mousedown', function (evt) {
 }, {once: true});
 
 mainPin.addEventListener('keydown', function (evt) {
-  if (evt.key === 'Enter') {
+  if (evt.key === 'Enter' || evt.key === ' ') {
     makePageActive(map, formOffer, formOfferElements, filtersForm, filtersFormElements);
     setAddress(mainPin, MAIN_PIN_WIDTH, MAIN_PIN_HEIGHT);
   }
-});
+}, {once: true});
 
 formOfferTitle.addEventListener('input', function () {
   const valueLength = formOfferTitle.value.length;
@@ -294,6 +376,20 @@ formOfferTitle.addEventListener('input', function () {
 
   formOfferTitle.reportValidity();
 
+});
+
+function changeMinPriceByType(myTarget, obj, minPrice) {
+  for (let key in obj) {
+    if (key === myTarget) {
+      minPrice.setAttribute('min', obj[key]);
+      minPrice.setAttribute('placeholder', obj[key]);
+    }
+  }
+}
+
+formOfferRoomType.addEventListener('change', function (evt) {
+  const typeOfRoom = evt.target.value;
+  changeMinPriceByType(typeOfRoom, MIN_TYPE_ROOM_PRICE, formOfferPrice);
 });
 
 formOfferPrice.addEventListener('input', function () {
@@ -331,3 +427,22 @@ formOfferCapacity.addEventListener('change', function (evt) {
   formOfferCapacity.reportValidity();
 });
 
+formOfferTimeIn.addEventListener('change', function (evt) {
+  const target = evt.target;
+  sincTime(target, formOfferTimeOut);
+});
+
+formOfferTimeOut.addEventListener('change', function (evt) {
+  const target = evt.target;
+  sincTime(target, formOfferTimeIn);
+});
+
+function sincTime(activeElem, changedElem) {
+  if (activeElem.matches('select[id="timein"]')) {
+    changedElem.selectedIndex = activeElem.selectedIndex;
+  }
+
+  if (activeElem.matches('select[id="timeout"]')) {
+    changedElem.selectedIndex = activeElem.selectedIndex;
+  }
+}
