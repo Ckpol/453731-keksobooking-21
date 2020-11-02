@@ -2,6 +2,7 @@
 
 (function () {
   const OFFER_TYPES = ['Бунгало', 'Квартира', 'Дом', 'Дворец'];
+
   const OFFER_ROOMS = ['1 комната', '2 комнаты', '3 комнаты', '100 комнат'];
   const OFFER_GUEST = ['для 3 гостей', 'для 2 гостей', 'для 1 гостя', 'не для гостей'];
   const OFFER_TIMEIN_LIST = ['после 12', 'после 13', 'после 14'];
@@ -58,6 +59,13 @@
       ad.offer.address = ad.location.x + ', ' + ad.location.y;
 
       return ad;
+    },
+
+    saveData: function (arr, elem) {
+      arr.map((item) => {
+        elem.push(item);
+      });
+
     }
   };
 })();

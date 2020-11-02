@@ -5,6 +5,7 @@
   const pinTemplateItem = pinTemplateList
   .content
   .querySelector('.map__pin');
+  const pinsList = document.querySelector('.map__pins');
 
   function createPin(ad) {
     const pinElement = pinTemplateItem.cloneNode(true);
@@ -17,13 +18,21 @@
   }
 
   window.pin = {
-    renderPins: function (myElems, place) {
+    renderPins: function (myElems) {
       const fragment = document.createDocumentFragment();
       if (Array.isArray(myElems)) {
+
+        if (myElems.length === 0) {
+          throw new Error('Массив данных пуст');
+        }
+
         for (let i = 0; i < myElems.length; i++) {
+          if (!myElems[i] || !myElems[i].offer) {
+            continue;
+          }
           fragment.appendChild(createPin(myElems[i]));
         }
-        place.appendChild(fragment);
+        pinsList.appendChild(fragment);
       }
     }
   };

@@ -6,6 +6,12 @@
   const pinTemplateCardItem = pinTemplateCard
   .content
   .querySelector('.popup');
+  const OFFER_TYPES = {
+    'bungalow': 'Бунгало',
+    'flat': 'Квартира',
+    'house': 'Дом',
+    'palace': 'Дворец'
+  };
 
   window.card = {
 
@@ -27,9 +33,9 @@
       cardTitle.textContent = `${ad.offer.title}`;
       cardAddress.textContent = `${ad.offer.address}`;
       cardPrice.textContent = `${ad.offer.price} ₽/ночь`;
-      cardRoomType.textContent = `${ad.offer.type}`;
-      cardCapacity.textContent = `${ad.offer.rooms} ${ad.offer.guests}`;
-      cardTime.textContent = `Заезд ${ad.offer.checkin}, ${ad.offer.checkout}`;
+      cardRoomType.textContent = OFFER_TYPES[`${ad.offer.type}`];
+      cardCapacity.textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
+      cardTime.textContent = `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
 
       const features = Array.from(cardFeaturesList);
       features.map((item, index) => {
@@ -58,7 +64,7 @@
       const textElem = pinCardElement.querySelectorAll('.popup__text');
       for (let key in ad.offer) {
 
-        if (ad.offer[key] === '') {
+        if (ad.offer[key] === '' || ad.offer[key].length === 0) {
           textElem.forEach((item) => {
 
             if (item.classList.contains(`popup__text--${key}`)) {
