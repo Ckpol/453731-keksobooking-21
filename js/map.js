@@ -3,10 +3,7 @@
 (function () {
   const map = document.querySelector('.map');
   const pinsList = document.querySelector('.map__pins');
-  const mainPin = pinsList.querySelector('.map__pin--main');
   const filtersContainer = map.querySelector('.map__filters-container');
-  const MAIN_PIN_WIDTH = 65;
-  const MAIN_PIN_HEIGHT = 70;
 
   function onCardEscPress(evt) {
     window.util.isEscEvent(evt, closeCard);
@@ -34,41 +31,9 @@
     }
     document.removeEventListener('keydown', onCardEscPress);
   }
-  function onMainPinClick(evt) {
-    if (evt.button === 0) {
-      window.main.changeToActive(
-          map,
-          window.form.formOffer,
-          window.form.formOfferElements,
-          window.form.filtersForm,
-          window.form.filtersFormElements);
-      window.form.setAddress(mainPin, MAIN_PIN_WIDTH, MAIN_PIN_HEIGHT);
-    }
-    mainPin.removeEventListener('keydown', onMainPinEnter);
-  }
-
-  function onMainPinEnter(evt) {
-    if (evt.key === 'Enter' || evt.key === ' ') {
-      window.main.changeToActive(
-          map,
-          window.form.formOffer,
-          window.form.formOfferElements,
-          window.form.filtersForm,
-          window.form.filtersFormElements);
-      window.form.setAddress(mainPin, MAIN_PIN_WIDTH, MAIN_PIN_HEIGHT);
-    }
-    mainPin.removeEventListener('mousedown', onMainPinClick);
-  }
-
-  mainPin.addEventListener('mousedown', onMainPinClick, {once: true});
-  mainPin.addEventListener('keydown', onMainPinEnter, {once: true});
 
   window.map = {
-    pinsMap: map,
     pinsList: pinsList,
-    mainPinButton: mainPin,
-    MAIN_PIN_START_WIDTH: 65,
-    MAIN_PIN_START_HEIGHT: 65,
 
     onPinClick: function (evt, ads) {
       const isImage = evt.target.matches('img');

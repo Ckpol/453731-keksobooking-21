@@ -5,6 +5,8 @@
 
   window.util = {
     MAX_WIDTH_MAP: getComputedStyle(pinsList).width,
+    MAIN_PIN_START_WIDTH: 65,
+    MAIN_PIN_START_HEIGHT: 65,
 
     getRandomArray: function (min, max, n) {
       const collection = new Set();

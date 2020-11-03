@@ -116,7 +116,7 @@
       let top = getComputedStyle(pin).top;
       left = parseInt(left, 10) + Math.floor(pinWidth / 2);
 
-      if (window.map.pinsMap.classList.contains('map--faded')) {
+      if (window.move.map.classList.contains('map--faded')) {
         pinHeight = Math.floor(pinHeight / 2);
       }
 
