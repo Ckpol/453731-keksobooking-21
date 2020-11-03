@@ -42,8 +42,6 @@
 
     window.load.load(window.pin.renderPins, errorHandler, window.data.saveData);
 
-    window.pin.renderPins(ads, window.move.pinsList);
-
     window.map.pinsList.addEventListener('click', function (evt) {
       window.map.onPinClick(evt, window.load.ads);
     });
