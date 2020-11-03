@@ -27,13 +27,20 @@
 
   function closeCard() {
     const mapCard = map.querySelector('.map__card');
+    const pins = pinsList.querySelectorAll('.map__pin');
 
     if (mapCard) {
       mapCard.remove();
+      Array.from(pins).find((item) => {
+        if (item.classList.contains('map__pin--active')) {
+          item.classList.remove('map__pin--active');
+        }
+      });
       mapCard.removeEventListener('click', onPopupCloseClick);
     }
     document.removeEventListener('keydown', onCardEscPress);
   }
+
   function onMainPinClick(evt) {
     if (evt.button === 0) {
       window.main.changeToActive(
@@ -71,6 +78,7 @@
     MAIN_PIN_START_HEIGHT: 65,
 
     onPinClick: function (evt, ads) {
+
       const isImage = evt.target.matches('img');
       const isParentMainElem = evt.target.parentNode.classList.contains('map__pin--main');
       const isParentElem = evt.target.parentNode.classList.contains('map__pin');
@@ -80,18 +88,33 @@
         evt.preventDefault();
       } else if (isImage && isParentElem || isButtonElem) {
         const pins = pinsList.querySelectorAll('.map__pin');
+
+        Array.from(pins).map((item) => {
+          if (item.classList.contains('map__pin--active')) {
+            item.classList.remove('map__pin--active');
+          }
+        });
         closeCard();
 
-        const ind = Array.from(pins).findIndex((item) => (evt.target === item || evt.target.parentNode === item));
+        const ind = Array.from(pins).findIndex(function (item, index) {
+          let number;
+          if (evt.target === item || evt.target.parentNode === item) {
+            item.classList.add('map__pin--active');
+            number = index;
+          }
+          return number;
+        });
         renderCard(ads[ind - 1], filtersContainer);
       }
     },
 
     onPinEnterPress: function (evt, ads) {
+
       if (evt.target.matches('button[class="map__pin"]')) {
 
         if (evt.key === 'Enter') {
           const pins = pinsList.querySelectorAll('.map__pin');
+
           closeCard();
           const ind = Array.from(pins).findIndex((item) => evt.target === item);
           renderCard(ads[ind - 1], filtersContainer);

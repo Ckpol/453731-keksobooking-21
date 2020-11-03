@@ -1,12 +1,6 @@
 'use strict';
 
 (function () {
-  const randomNumbers = window.util.getRandomArray(
-      window.data.MIN_RANDOM_NUMBER,
-      window.data.MAX_RANDOM_NUMBER,
-      window.data.OBJECTS_QUANTITY
-  );
-
   function makePageInactive(myMap, myForm1, myFormElements1, myForm2, myFormElements2) {
 
     if (!myMap.classList.contains('map--faded')) {
@@ -46,19 +40,27 @@
       item.removeAttribute('disabled');
     });
 
-    const ads = [];
-    for (let i = 0; i <= (window.data.OBJECTS_QUANTITY - 1); i++) {
-      ads.push(window.data.createAd(i, randomNumbers));
-    }
+    window.load.load(window.pin.renderPins, errorHandler, window.data.saveData);
 
-    window.pin.renderPins(ads, window.map.pinsList);
     window.map.pinsList.addEventListener('click', function (evt) {
-      window.map.onPinClick(evt, ads);
+      window.map.onPinClick(evt, window.load.ads);
     });
 
     window.map.pinsList.addEventListener('keydown', function (evt) {
-      window.map.onPinEnterPress(evt, ads);
+      window.map.onPinEnterPress(evt, window.load.ads);
     });
+  }
+
+  function errorHandler(errorMessage) {
+    const node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
   }
 
   makePageInactive(
@@ -73,11 +75,8 @@
       window.map.MAIN_PIN_START_HEIGHT
   );
 
-
   window.main = {
     changeToInactive: makePageInactive,
     changeToActive: makePageActive
   };
-
-
 })();
