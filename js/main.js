@@ -64,16 +64,19 @@
   }
 
   makePageInactive(
-      window.map.pinsMap,
+      window.move.map,
       window.form.formOffer,
       window.form.formOfferElements,
       window.form.filtersForm,
       window.form.filtersFormElements);
   window.form.setAddress(
-      window.map.mainPinButton,
-      window.map.MAIN_PIN_START_WIDTH,
-      window.map.MAIN_PIN_START_HEIGHT
+      window.move.mainPin,
+      window.util.MAIN_PIN_START_WIDTH,
+      window.util.MAIN_PIN_START_HEIGHT
   );
+
+  window.move.mainPin.addEventListener('mousedown', window.move.onMainPinClick);
+  window.move.mainPin.addEventListener('keydown', window.move.onMainPinEnter);
 
   window.main = {
     changeToInactive: makePageInactive,
