@@ -38,8 +38,19 @@
     document.removeEventListener('keydown', onCardEscPress);
   }
 
+  function clearMap(myMap) {
+    const items = myMap.querySelectorAll('button');
+    closeCard();
+    Array.from(items).map(function (item, index) {
+      if (index >= 1) {
+        item.remove();
+      }
+    });
+  }
+
   window.map = {
     pinsList: pinsList,
+    clearMap: clearMap,
 
     onPinClick: function (evt, ads) {
 

@@ -15,6 +15,7 @@
   const formOfferRoomType = formOffer.querySelector('#type');
   const formOfferTimeIn = formOffer.querySelector('#timein');
   const formOfferTimeOut = formOffer.querySelector('#timeout');
+  const formOfferResetButton = formOffer.querySelector('.ad-form__reset');
   const MIN_TYPE_ROOM_PRICE = {
     'bungalow': 0,
     'flat': 1000,
@@ -110,6 +111,12 @@
     formOfferElements: formOfferElements,
     filtersForm: filtersForm,
     filtersFormElements: filtersForm.children,
+    formOfferResetButton: formOfferResetButton,
+
+    clearForm: function () {
+      const form = formOffer;
+      form.reset();
+    },
 
     setAddress: function (pin, pinWidth, pinHeight) {
       let left = getComputedStyle(pin).left;
