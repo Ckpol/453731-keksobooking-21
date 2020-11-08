@@ -9,6 +9,19 @@
     MAIN_PIN_START_HEIGHT: 65,
     MAIN_PIN_START_TOP_COORD: '375px',
     MAIN_PIN_START_LEFT_COORD: '570px',
+    PINS_NUMBER: 5,
+
+    errorHandler: function (errorMessage) {
+      const node = document.createElement('div');
+      node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+      node.style.position = 'absolute';
+      node.style.left = 0;
+      node.style.right = 0;
+      node.style.fontSize = '30px';
+
+      node.textContent = errorMessage;
+      document.body.insertAdjacentElement('afterbegin', node);
+    },
 
     getRandomArray: function (min, max, n) {
       const collection = new Set();

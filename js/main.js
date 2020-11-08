@@ -1,6 +1,21 @@
 'use strict';
 
 (function () {
+  let pins = [];
+  let currentPins = [];
+
+  function successHandler(data) {
+    pins = data;
+    if (data.length > 0) {
+      window.form.filtersForm.classList.remove('map__filters--disabled');
+      Array.from(window.form.filtersFormElements)
+      .map((item) => {
+        item.removeAttribute('disabled');
+      });
+    }
+    window.pin.renderPins(pins);
+  }
+
   function makePageInactive(myMap, myForm1, myFormElements1, myForm2, myFormElements2) {
 
     if (!myMap.classList.contains('map--faded')) {
@@ -37,29 +52,16 @@
     );
   }
 
-  function makePageActive(myMap, myForm1, myFormElements1, myForm2, myFormElements2) {
+  function makePageActive(myMap, myForm1, myFormElements1) {
     myMap.classList.remove('map--faded');
     myForm1.classList.remove('ad-form--disabled');
-    myForm2.classList.remove('map__filters--disabled');
+
     Array.from(myFormElements1)
     .map((item) => {
       item.removeAttribute('disabled');
     });
 
-    Array.from(myFormElements2)
-    .map((item) => {
-      item.removeAttribute('disabled');
-    });
-
-    window.load.load(window.pin.renderPins, window.load.errorHandler, window.data.saveData);
-
-    window.map.pinsList.addEventListener('click', function (evt) {
-      window.map.onPinClick(evt, window.load.ads);
-    });
-
-    window.map.pinsList.addEventListener('keydown', function (evt) {
-      window.map.onPinEnterPress(evt, window.load.ads);
-    });
+    window.load.load(successHandler, window.util.errorHandler);
   }
 
   makePageInactive(
@@ -76,6 +78,14 @@
 
   window.move.mainPin.addEventListener('mousedown', window.move.onMainPinClick);
   window.move.mainPin.addEventListener('keydown', window.move.onMainPinEnter);
+
+  window.map.pinsList.addEventListener('click', function (evt) {
+    window.map.onPinClick(evt);
+  });
+
+  window.map.pinsList.addEventListener('keydown', function (evt) {
+    window.map.onPinEnterPress(evt);
+  });
 
   window.form.formOffer.addEventListener('submit', function (evt) {
     window.upload.upload(
@@ -106,8 +116,14 @@
         window.form.filtersFormElements);
   });
 
+  window.pinsFilter.housingType.addEventListener('change', function (evt) {
+    window.pinsFilter.updatePins(pins, evt);
+  });
+
   window.main = {
     changeToInactive: makePageInactive,
-    changeToActive: makePageActive
+    changeToActive: makePageActive,
+    pins,
+    currentPins
   };
 })();

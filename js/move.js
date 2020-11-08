@@ -12,18 +12,17 @@
   const MAX_COORD_X = parseInt(window.util.MAX_WIDTH_MAP, 10) - Math.floor(MAIN_PIN_WIDTH / 2);
 
   window.move = {
-    map: map,
-    pinsList: pinsList,
-    mainPin: mainPin,
+    map,
+    pinsList,
+    mainPin,
 
     onMainPinEnter: function (evt) {
       if ((evt.key === 'Enter' || evt.key === ' ') && map.classList.contains('map--faded')) {
         window.main.changeToActive(
             map,
             window.form.formOffer,
-            window.form.formOfferElements,
-            window.form.filtersForm,
-            window.form.filtersFormElements);
+            window.form.formOfferElements
+        );
         window.form.setAddress(
             mainPin,
             MAIN_PIN_WIDTH,
@@ -39,9 +38,8 @@
         window.main.changeToActive(
             map,
             window.form.formOffer,
-            window.form.formOfferElements,
-            window.form.filtersForm,
-            window.form.filtersFormElements);
+            window.form.formOfferElements
+        );
         window.form.setAddress(
             mainPin,
             MAIN_PIN_WIDTH,
