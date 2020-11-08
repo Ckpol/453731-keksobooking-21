@@ -10,10 +10,12 @@
     'bungalow': 'Бунгало',
     'flat': 'Квартира',
     'house': 'Дом',
-    'palace': 'Дворец'
+    'palace': 'Дворец',
+    'any': 'Любой тип жилья'
   };
 
   window.card = {
+    OFFER_TYPES,
 
     createPinCard: function (ad) {
       const pinCardElement = pinTemplateCardItem.cloneNode(true);

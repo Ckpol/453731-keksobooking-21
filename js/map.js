@@ -49,10 +49,10 @@
   }
 
   window.map = {
-    pinsList: pinsList,
-    clearMap: clearMap,
+    pinsList,
+    clearMap,
 
-    onPinClick: function (evt, ads) {
+    onPinClick: function (evt) {
 
       const isImage = evt.target.matches('img');
       const isParentMainElem = evt.target.parentNode.classList.contains('map__pin--main');
@@ -79,11 +79,12 @@
           }
           return number;
         });
-        renderCard(ads[ind - 1], filtersContainer);
+
+        renderCard(window.main.currentPins[ind - 1], filtersContainer);
       }
     },
 
-    onPinEnterPress: function (evt, ads) {
+    onPinEnterPress: function (evt) {
 
       if (evt.target.matches('button[class="map__pin"]')) {
 
@@ -92,7 +93,7 @@
 
           closeCard();
           const ind = Array.from(pins).findIndex((item) => evt.target === item);
-          renderCard(ads[ind - 1], filtersContainer);
+          renderCard(window.main.currentPins[ind - 1], filtersContainer);
         } else if (evt.key === ' ') {
           evt.preventDefault();
         }

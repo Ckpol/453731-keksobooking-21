@@ -107,11 +107,11 @@
   }
 
   window.form = {
-    formOffer: formOffer,
-    formOfferElements: formOfferElements,
-    filtersForm: filtersForm,
+    formOffer,
+    formOfferElements,
+    filtersForm,
     filtersFormElements: filtersForm.children,
-    formOfferResetButton: formOfferResetButton,
+    formOfferResetButton,
 
     clearForm: function () {
       const form = formOffer;

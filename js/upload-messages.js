@@ -61,8 +61,8 @@
   }
 
   window.uploadMessages = {
-    showSuccessMesage: showSuccessMesage,
-    showErrorMessage: showErrorMessage,
-    closeMessage: closeMessage
+    showSuccessMesage,
+    showErrorMessage,
+    closeMessage
   };
 })();

@@ -2,23 +2,11 @@
 
 (function () {
   const URL = 'https://21.javascript.pages.academy/keksobooking/data';
-  const response = [];
   const TIMEOUT_IN_MS = 10000;
 
   window.load = {
-    errorHandler: function (errorMessage) {
-      const node = document.createElement('div');
-      node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-      node.style.position = 'absolute';
-      node.style.left = 0;
-      node.style.right = 0;
-      node.style.fontSize = '30px';
 
-      node.textContent = errorMessage;
-      document.body.insertAdjacentElement('afterbegin', node);
-    },
-
-    load: function (onSuccess, onError, saveData) {
+    load: function (onSuccess, onError) {
       const xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
       xhr.addEventListener('load', function () {
@@ -29,8 +17,6 @@
           } catch (err) {
             onError(`Error: ${err.message}`);
           }
-
-          saveData(xhr.response, response);
         } else {
           onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
         }
@@ -47,9 +33,7 @@
 
       xhr.open('GET', URL);
       xhr.send();
-    },
-
-    ads: response
+    }
   };
 })();
 
