@@ -41,63 +41,64 @@
   function clearMap(myMap) {
     const items = myMap.querySelectorAll('button');
     closeCard();
-    Array.from(items).map(function (item, index) {
+    Array.from(items).map((item, index) => {
       if (index >= 1) {
         item.remove();
       }
     });
   }
 
+  function onPinClick(evt) {
+
+    const isImage = evt.target.matches('img');
+    const isParentMainElem = evt.target.parentNode.classList.contains('map__pin--main');
+    const isParentElem = evt.target.parentNode.classList.contains('map__pin');
+    const isButtonElem = evt.target.matches('button[class="map__pin"]');
+
+    if (isImage && isParentMainElem) {
+      evt.preventDefault();
+    } else if (isImage && isParentElem || isButtonElem) {
+      const pins = pinsList.querySelectorAll('.map__pin');
+
+      Array.from(pins).map((item) => {
+        if (item.classList.contains('map__pin--active')) {
+          item.classList.remove('map__pin--active');
+        }
+      });
+      closeCard();
+
+      const ind = Array.from(pins).findIndex((item) => {
+        if (evt.target === item || evt.target.parentNode === item) {
+          item.classList.add('map__pin--active');
+          return true;
+        } else {
+          return false;
+        }
+      });
+      renderCard(window.main.currentPins[ind - 1], filtersContainer);
+    }
+  }
+
+  function onPinEnterPress(evt) {
+
+    if (evt.target.matches('button[class="map__pin"]')) {
+
+      if (evt.key === 'Enter') {
+        const pins = pinsList.querySelectorAll('.map__pin');
+
+        closeCard();
+        const ind = Array.from(pins).findIndex((item) => evt.target === item);
+        renderCard(window.main.currentPins[ind - 1], filtersContainer);
+      } else if (evt.key === ' ') {
+        evt.preventDefault();
+      }
+    }
+  }
+
   window.map = {
     pinsList,
     clearMap,
-
-    onPinClick: function (evt) {
-
-      const isImage = evt.target.matches('img');
-      const isParentMainElem = evt.target.parentNode.classList.contains('map__pin--main');
-      const isParentElem = evt.target.parentNode.classList.contains('map__pin');
-      const isButtonElem = evt.target.matches('button[class="map__pin"]');
-
-      if (isImage && isParentMainElem) {
-        evt.preventDefault();
-      } else if (isImage && isParentElem || isButtonElem) {
-        const pins = pinsList.querySelectorAll('.map__pin');
-
-        Array.from(pins).map((item) => {
-          if (item.classList.contains('map__pin--active')) {
-            item.classList.remove('map__pin--active');
-          }
-        });
-        closeCard();
-
-        const ind = Array.from(pins).findIndex(function (item, index) {
-          let number;
-          if (evt.target === item || evt.target.parentNode === item) {
-            item.classList.add('map__pin--active');
-            number = index;
-          }
-          return number;
-        });
-
-        renderCard(window.main.currentPins[ind - 1], filtersContainer);
-      }
-    },
-
-    onPinEnterPress: function (evt) {
-
-      if (evt.target.matches('button[class="map__pin"]')) {
-
-        if (evt.key === 'Enter') {
-          const pins = pinsList.querySelectorAll('.map__pin');
-
-          closeCard();
-          const ind = Array.from(pins).findIndex((item) => evt.target === item);
-          renderCard(window.main.currentPins[ind - 1], filtersContainer);
-        } else if (evt.key === ' ') {
-          evt.preventDefault();
-        }
-      }
-    }
+    onPinClick,
+    onPinEnterPress
   };
 })();

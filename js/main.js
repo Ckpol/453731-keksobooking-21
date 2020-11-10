@@ -3,6 +3,7 @@
 (function () {
   let pins = [];
   let currentPins = [];
+  let lastTimeout;
 
   function successHandler(data) {
     pins = data;
@@ -29,13 +30,13 @@
     if (!myForm2.classList.contains('map__filters--disabled')) {
       myForm2.classList.add('map__filters--disabled');
     }
-    window.form.clearForm(myFormElements1);
+    window.form.clearForm(myForm1);
     Array.from(myFormElements1)
     .map((item) => {
       item.setAttribute('disabled', 'disabled');
     });
 
-    window.form.clearForm(myFormElements2);
+    window.form.clearForm(myForm2);
     Array.from(myFormElements2)
     .map((item) => {
       item.setAttribute('disabled', 'disabled');
@@ -116,8 +117,15 @@
         window.form.filtersFormElements);
   });
 
-  window.pinsFilter.housingType.addEventListener('change', function (evt) {
-    window.pinsFilter.updatePins(pins, evt);
+  window.form.filtersForm.addEventListener('change', function (evt) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    window.pinsFilter.saveFilters();
+
+    lastTimeout = window.setTimeout(function () {
+      window.pinsFilter.updatePins(pins, evt);
+    }, window.util.DEBOUNCE_INTERVAL);
   });
 
   window.main = {
