@@ -106,29 +106,31 @@
     }
   }
 
+  function clearForm(someForm) {
+    const form = someForm;
+    form.reset();
+  }
+
+  function setAddress(pin, pinWidth, pinHeight) {
+    let left = getComputedStyle(pin).left;
+    let top = getComputedStyle(pin).top;
+    left = parseInt(left, 10) + Math.floor(pinWidth / 2);
+
+    if (window.move.map.classList.contains('map--faded')) {
+      pinHeight = Math.floor(pinHeight / 2);
+    }
+
+    top = parseInt(top, 10) + pinHeight;
+    formOfferAddress.value = left + ', ' + top;
+  }
+
   window.form = {
     formOffer,
     formOfferElements,
     filtersForm,
     filtersFormElements: filtersForm.children,
     formOfferResetButton,
-
-    clearForm: function () {
-      const form = formOffer;
-      form.reset();
-    },
-
-    setAddress: function (pin, pinWidth, pinHeight) {
-      let left = getComputedStyle(pin).left;
-      let top = getComputedStyle(pin).top;
-      left = parseInt(left, 10) + Math.floor(pinWidth / 2);
-
-      if (window.move.map.classList.contains('map--faded')) {
-        pinHeight = Math.floor(pinHeight / 2);
-      }
-
-      top = parseInt(top, 10) + pinHeight;
-      formOfferAddress.value = left + ', ' + top;
-    }
+    clearForm,
+    setAddress
   };
 })();

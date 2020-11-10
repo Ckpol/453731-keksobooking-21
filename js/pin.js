@@ -17,16 +17,10 @@
     return pinElement;
   }
 
-  window.pin = {
-
-    renderPins: function (myElems) {
-      const fragment = document.createDocumentFragment();
-      if (Array.isArray(myElems)) {
-
-        if (myElems.length === 0) {
-          throw new Error('Массив данных пуст');
-        }
-
+  function renderPins(myElems) {
+    const fragment = document.createDocumentFragment();
+    if (Array.isArray(myElems)) {
+      if (myElems.length !== 0) {
         for (let i = 0; i < window.util.PINS_NUMBER; i++) {
           if (!myElems[i] || !myElems[i].offer) {
             continue;
@@ -34,9 +28,14 @@
           fragment.appendChild(createPin(myElems[i]));
         }
         pinsList.appendChild(fragment);
-        window.main.currentPins = myElems;
+
       }
+      window.main.currentPins = myElems;
     }
+  }
+
+  window.pin = {
+    renderPins
   };
 
 })();

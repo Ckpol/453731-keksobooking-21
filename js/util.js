@@ -10,6 +10,7 @@
     MAIN_PIN_START_TOP_COORD: '375px',
     MAIN_PIN_START_LEFT_COORD: '570px',
     PINS_NUMBER: 5,
+    DEBOUNCE_INTERVAL: 500,
 
     errorHandler: function (errorMessage) {
       const node = document.createElement('div');
