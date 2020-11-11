@@ -16,6 +16,8 @@
   const formOfferTimeIn = formOffer.querySelector('#timein');
   const formOfferTimeOut = formOffer.querySelector('#timeout');
   const formOfferResetButton = formOffer.querySelector('.ad-form__reset');
+  const filterFormFeatures = filtersForm.querySelector('.map__features');
+  const formOfferFeatures = formOffer.querySelector('.features');
   const MIN_TYPE_ROOM_PRICE = {
     'bungalow': 0,
     'flat': 1000,
@@ -124,6 +126,17 @@
     formOfferAddress.value = left + ', ' + top;
   }
 
+  formOfferFeatures.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Enter') {
+      if (evt.target.checked) {
+        evt.target.checked = false;
+      } else {
+        evt.target.checked = true;
+      }
+      evt.preventDefault();
+    }
+  });
+
   window.form = {
     formOffer,
     formOfferElements,
@@ -131,6 +144,7 @@
     filtersFormElements: filtersForm.children,
     formOfferResetButton,
     clearForm,
-    setAddress
+    setAddress,
+    filterFormFeatures
   };
 })();
