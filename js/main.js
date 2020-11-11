@@ -98,7 +98,7 @@
               window.form.filtersForm,
               window.form.filtersFormElements
           );
-          window.uploadMessages.showSuccessMesage();
+          window.uploadMessages.showSuccessMessage();
         },
         window.uploadMessages.showErrorMessage
     );
