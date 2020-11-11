@@ -11,6 +11,9 @@
     MAIN_PIN_START_LEFT_COORD: '570px',
     PINS_NUMBER: 5,
     DEBOUNCE_INTERVAL: 500,
+    PREVIEW_CONTAINER_WIDTH: 70,
+    PREVIEW_CONTAINER_HEIGHT: 70,
+    FILE_TYPES: ['gif', 'jpg', 'jpeg', 'png'],
 
     errorHandler: function (errorMessage) {
       const node = document.createElement('div');

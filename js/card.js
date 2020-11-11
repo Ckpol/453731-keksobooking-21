@@ -51,6 +51,7 @@
     const cardAvvatar = pinCardElement.querySelector('.popup__avatar');
     const cardFeaturesList = cardFeatures.querySelectorAll('.popup__feature');
     const cardPhoto = cardPhotos.querySelector('.popup__photo');
+    const textElems = pinCardElement.querySelectorAll('.popup__text');
 
     cardTitle.textContent = `${ad.offer.title}`;
     cardAddress.textContent = `${ad.offer.address}`;
@@ -83,7 +84,6 @@
 
     cardAvvatar.src = `${ad.author.avatar}`;
 
-    const textElems = pinCardElement.querySelectorAll('.popup__text');
     for (let key in ad.offer) {
 
       if (ad.offer[key] === '' || ad.offer[key].length === 0) {

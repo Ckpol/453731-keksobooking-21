@@ -14,7 +14,7 @@
   let currentMessage;
   let errorButton;
 
-  function showSuccessMesage() {
+  function showSuccessMessage() {
     const message = successMessageItem.cloneNode(true);
     fragment.appendChild(message);
     main.appendChild(fragment);
@@ -61,7 +61,7 @@
   }
 
   window.uploadMessages = {
-    showSuccessMesage,
+    showSuccessMessage,
     showErrorMessage,
     closeMessage
   };
