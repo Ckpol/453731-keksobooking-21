@@ -1,6 +1,8 @@
 'use strict';
 (function () {
 
+  const filterCheckboxList = window.form.filtersForm.querySelectorAll('.map__checkbox');
+  const filterSelectList = window.form.filtersForm.querySelectorAll('.map__filter');
   let filters = {
     'housing-type': 'any',
     'housing-price': 'any',
@@ -12,8 +14,8 @@
   let max;
 
   function saveFilters() {
-    const elems = window.form.filtersForm.querySelectorAll('.map__filter');
-    Array.from(elems).forEach((item) => {
+
+    Array.from(filterSelectList).forEach((item) => {
       filters[item.id] = item.value;
       if (item.id === 'housing-price') {
 
@@ -26,9 +28,8 @@
       }
     });
 
-    const inputs = window.form.filtersForm.querySelectorAll('.map__checkbox');
     filters.features = [];
-    inputs.forEach((item) => {
+    filterCheckboxList.forEach((item) => {
       if (item.checked === true) {
         filters.features.push(item.value);
       }
@@ -87,9 +88,14 @@
     window.pin.renderPins(filteredPins);
   }
 
+  const updatePinsWithDebounce = window.debounce(function (arr) {
+    updatePins(arr);
+  });
 
   window.pinsFilter = {
     updatePins,
-    saveFilters
+    saveFilters,
+    filterCheckboxList,
+    updatePinsWithDebounce
   };
 })();

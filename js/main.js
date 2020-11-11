@@ -3,7 +3,6 @@
 (function () {
   let pins = [];
   let currentPins = [];
-  let lastTimeout;
 
   function successHandler(data) {
     pins = data;
@@ -17,27 +16,27 @@
     window.pin.renderPins(pins);
   }
 
-  function makePageInactive(myMap, myForm1, myFormElements1, myForm2, myFormElements2) {
+  function makePageInactive(myMap, offerForm, offerFormElems, filterForm, filterFormElems) {
 
     if (!myMap.classList.contains('map--faded')) {
       myMap.classList.add('map--faded');
     }
 
-    if (!myForm1.classList.contains('ad-form--disabled')) {
-      myForm1.classList.add('ad-form--disabled');
+    if (!offerForm.classList.contains('ad-form--disabled')) {
+      offerForm.classList.add('ad-form--disabled');
     }
 
-    if (!myForm2.classList.contains('map__filters--disabled')) {
-      myForm2.classList.add('map__filters--disabled');
+    if (!filterForm.classList.contains('map__filters--disabled')) {
+      filterForm.classList.add('map__filters--disabled');
     }
-    window.form.clearForm(myForm1);
-    Array.from(myFormElements1)
+    window.form.clearForm(offerForm);
+    Array.from(offerFormElems)
     .map((item) => {
       item.setAttribute('disabled', 'disabled');
     });
 
-    window.form.clearForm(myForm2);
-    Array.from(myFormElements2)
+    window.form.clearForm(filterForm);
+    Array.from(filterFormElems)
     .map((item) => {
       item.setAttribute('disabled', 'disabled');
     });
@@ -53,11 +52,11 @@
     );
   }
 
-  function makePageActive(myMap, myForm1, myFormElements1) {
+  function makePageActive(myMap, offerForm, offerFormElems) {
     myMap.classList.remove('map--faded');
-    myForm1.classList.remove('ad-form--disabled');
+    offerForm.classList.remove('ad-form--disabled');
 
-    Array.from(myFormElements1)
+    Array.from(offerFormElems)
     .map((item) => {
       item.removeAttribute('disabled');
     });
@@ -117,15 +116,22 @@
         window.form.filtersFormElements);
   });
 
-  window.form.filtersForm.addEventListener('change', function (evt) {
-    if (lastTimeout) {
-      window.clearTimeout(lastTimeout);
-    }
-    window.pinsFilter.saveFilters();
+  window.form.filterFormFeatures.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Enter') {
+      if (evt.target.checked) {
+        evt.target.checked = false;
+      } else {
+        evt.target.checked = true;
+      }
 
-    lastTimeout = window.setTimeout(function () {
-      window.pinsFilter.updatePins(pins, evt);
-    }, window.util.DEBOUNCE_INTERVAL);
+      window.pinsFilter.saveFilters();
+      window.pinsFilter.updatePinsWithDebounce(pins);
+    }
+  });
+
+  window.form.filtersForm.addEventListener('change', function () {
+    window.pinsFilter.saveFilters();
+    window.pinsFilter.updatePinsWithDebounce(pins);
   });
 
   window.main = {

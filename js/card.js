@@ -83,11 +83,11 @@
 
     cardAvvatar.src = `${ad.author.avatar}`;
 
-    const textElem = pinCardElement.querySelectorAll('.popup__text');
+    const textElems = pinCardElement.querySelectorAll('.popup__text');
     for (let key in ad.offer) {
 
       if (ad.offer[key] === '' || ad.offer[key].length === 0) {
-        textElem.forEach((item) => {
+        textElems.forEach((item) => {
 
           if (item.classList.contains(`popup__text--${key}`)) {
             item.classList.add('hidden');
