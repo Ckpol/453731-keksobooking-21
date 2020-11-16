@@ -1,25 +1,28 @@
 'use strict';
 (function () {
 
-  const filterCheckboxList = window.form.filtersForm.querySelectorAll('.map__checkbox');
-  const filterSelectList = window.form.filtersForm.querySelectorAll('.map__filter');
+  const filterCheckboxList = window.form.filters.querySelectorAll(`.map__checkbox`);
+  const filterSelectList = window.form.filters.querySelectorAll(`.map__filter`);
   let filters = {
-    'housing-type': 'any',
-    'housing-price': 'any',
-    'housing-rooms': 'any',
-    'housing-guests': 'any',
+    'housing-type': `any`,
+    'housing-price': `any`,
+    'housing-rooms': `any`,
+    'housing-guests': `any`,
     'features': []
   };
   let min;
   let max;
+  const updatePinsWithDebounce = window.debounce((arr) => {
+    updatePins(arr);
+  });
 
-  function saveFilters() {
+  const saveFilters = () => {
 
     Array.from(filterSelectList).forEach((item) => {
       filters[item.id] = item.value;
-      if (item.id === 'housing-price') {
+      if (item.id === `housing-price`) {
 
-        window.card.OFFER_PRICE.forEach((elem) => {
+        window.card.offerPrice.forEach((elem) => {
           if (item.value === elem.title) {
             min = elem.minValue;
             max = elem.maxValue;
@@ -34,68 +37,60 @@
         filters.features.push(item.value);
       }
     });
-  }
+  };
 
-  function updatePins(arr) {
-    let filteredPins = arr;
+  const updatePins = (arr) => {
+    let filteredPins = [];
+    const isTypeNotAny = filters[`housing-type`] !== `any`;
+    const isPriceNotAny = filters[`housing-price`] !== `any`;
+    const isRoomNotAny = filters[`housing-rooms`] !== `any`;
+    const isGuestNotAny = filters[`housing-guests`] !== `any`;
 
-    if (filters['housing-type'] !== 'any') {
-      filteredPins = filteredPins.filter((item) => {
-        return item.offer.type === filters['housing-type'];
-      });
-    }
+    if (arr.length !== 0) {
+      for (let i = 0; i < arr.length; i++) {
 
-    if (filters['housing-price'] !== 'any') {
-
-      filteredPins = filteredPins.filter((item) => {
-        let result = true;
-
-        switch (filters['housing-price']) {
-          case 'middle':
-            result = item.offer.price >= min && item.offer.price <= max;
-            break;
-          case 'low':
-            result = item.offer.price <= max;
-            break;
-          case 'high':
-            result = item.offer.price >= min;
-            break;
+        if (arr[i].offer.type !== filters[`housing-type`]
+        && isTypeNotAny) {
+          continue;
         }
 
-        return result;
-      });
+        if (isPriceNotAny
+        && !(min <= arr[i].offer.price && max >= arr[i].offer.price)) {
+          continue;
+        }
+
+        if (isRoomNotAny
+        && arr[i].offer.rooms !== parseInt(filters[`housing-rooms`], 10)) {
+          continue;
+        }
+
+        if (isGuestNotAny
+        && arr[i].offer.guests !== parseInt(filters[`housing-guests`], 10)) {
+          continue;
+        }
+
+        let flag = true;
+        filters.features.forEach((feature) => {
+          if (!arr[i].offer.features.includes(feature)) {
+            flag = false;
+          }
+        });
+        if (!flag) {
+          continue;
+        }
+
+        filteredPins.push(arr[i]);
+        if (filteredPins.lenght >= window.util.PINS_NUMBER) {
+          break;
+        }
+      }
+      window.map.clear(window.move.pinsList);
+      window.pin.render(filteredPins);
     }
-
-    if (filters['housing-rooms'] !== 'any') {
-      filteredPins = filteredPins.filter((item) => {
-        return item.offer.rooms === parseInt(filters['housing-rooms'], 10);
-      });
-    }
-
-    if (filters['housing-guests'] !== 'any') {
-      filteredPins = filteredPins.filter((item) => {
-        return item.offer.guests === parseInt(filters['housing-guests'], 10);
-      });
-    }
-
-    filteredPins = filters.features.reduce((acc, feature) => {
-      return acc.filter((item)=> {
-        return item.offer.features.includes(feature);
-      });
-    }, filteredPins);
-
-    window.map.clearMap(window.move.pinsList);
-    window.pin.renderPins(filteredPins);
-  }
-
-  const updatePinsWithDebounce = window.debounce(function (arr) {
-    updatePins(arr);
-  });
+  };
 
   window.pinsFilter = {
-    updatePins,
-    saveFilters,
-    filterCheckboxList,
-    updatePinsWithDebounce
+    saveData: saveFilters,
+    updateWithDebounce: updatePinsWithDebounce
   };
 })();
