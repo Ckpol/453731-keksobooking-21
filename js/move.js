@@ -1,22 +1,22 @@
 'use strict';
 
 (function () {
-  const map = document.querySelector('.map');
-  const pinsList = document.querySelector('.map__pins');
-  const mainPin = pinsList.querySelector('.map__pin--main');
   const MAIN_PIN_WIDTH = 65;
   const MAIN_PIN_HEIGHT = 70;
   const MIN_COORD_Y = 130 - MAIN_PIN_HEIGHT;
   const MAX_COORD_Y = 630 - MAIN_PIN_HEIGHT;
   const MIN_COORD_X = 0 - Math.floor(MAIN_PIN_WIDTH / 2);
-  const MAX_COORD_X = parseInt(window.util.MAX_WIDTH_MAP, 10) - Math.floor(MAIN_PIN_WIDTH / 2);
+  const MAX_COORD_X = parseInt(window.util.maxWidthMap, 10) - Math.floor(MAIN_PIN_WIDTH / 2);
+  const map = document.querySelector(`.map`);
+  const pinsList = document.querySelector(`.map__pins`);
+  const mainPin = pinsList.querySelector(`.map__pin--main`);
 
-  function onMainPinEnter(evt) {
-    if ((evt.key === 'Enter' || evt.key === ' ') && map.classList.contains('map--faded')) {
+  const onMainPinEnter = (evt) => {
+    if ((evt.key === `Enter` || evt.key === ` `) && map.classList.contains(`map--faded`)) {
       window.main.changeToActive(
           map,
-          window.form.formOffer,
-          window.form.formOfferElements
+          window.form.offer,
+          window.form.offerElements
       );
       window.form.setAddress(
           mainPin,
@@ -24,16 +24,16 @@
           MAIN_PIN_HEIGHT
       );
     }
-  }
+  };
 
-  function onMainPinClick(evt) {
+  const onMainPinClick = (evt) => {
     evt.preventDefault();
 
-    if (evt.button === 0 && map.classList.contains('map--faded')) {
+    if (evt.button === 0 && map.classList.contains(`map--faded`)) {
       window.main.changeToActive(
           map,
-          window.form.formOffer,
-          window.form.formOfferElements
+          window.form.offer,
+          window.form.offerElements
       );
       window.form.setAddress(
           mainPin,
@@ -47,7 +47,7 @@
       y: evt.clientY
     };
 
-    function omMouseMove(moveEvt) {
+    const onMouseMove = (moveEvt) => {
       moveEvt.preventDefault();
 
       const shift = {
@@ -75,16 +75,16 @@
         resultLeft = MIN_COORD_X;
       }
 
-      mainPin.style.top = resultTop + 'px';
-      mainPin.style.left = resultLeft + 'px';
+      mainPin.style.top = resultTop + `px`;
+      mainPin.style.left = resultLeft + `px`;
       window.form.setAddress(
           mainPin,
           MAIN_PIN_WIDTH,
           MAIN_PIN_HEIGHT
       );
-    }
+    };
 
-    function omMouseUp(upEvt) {
+    const onMouseUp = (upEvt) => {
       upEvt.preventDefault();
       window.form.setAddress(
           mainPin,
@@ -92,13 +92,13 @@
           MAIN_PIN_HEIGHT
       );
 
-      pinsList.removeEventListener('mousemove', omMouseMove);
-      pinsList.removeEventListener('mouseup', omMouseUp);
-    }
+      pinsList.removeEventListener(`mousemove`, onMouseMove);
+      pinsList.removeEventListener(`mouseup`, onMouseUp);
+    };
 
-    pinsList.addEventListener('mousemove', omMouseMove);
-    pinsList.addEventListener('mouseup', omMouseUp);
-  }
+    pinsList.addEventListener(`mousemove`, onMouseMove);
+    pinsList.addEventListener(`mouseup`, onMouseUp);
+  };
 
   window.move = {
     map,

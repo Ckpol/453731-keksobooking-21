@@ -1,68 +1,62 @@
 'use strict';
 (function () {
-  const successMessageTemplate = document.querySelector('#success');
+  const successMessageTemplate = document.querySelector(`#success`);
   const successMessageItem = successMessageTemplate
   .content
-  .querySelector('.success');
-  const errorMessageTemplate = document.querySelector('#error');
+  .querySelector(`.success`);
+  const errorMessageTemplate = document.querySelector(`#error`);
   const errorMessageItem = errorMessageTemplate
   .content
-  .querySelector('.error');
+  .querySelector(`.error`);
 
-  const main = document.querySelector('main');
-  const fragment = document.createDocumentFragment();
+  const main = document.querySelector(`main`);
   let currentMessage;
   let errorButton;
 
-  function showSuccessMessage() {
+  const showSuccessMessage = () => {
     const message = successMessageItem.cloneNode(true);
-    fragment.appendChild(message);
-    main.appendChild(fragment);
+    main.appendChild(message);
+    currentMessage = main.querySelector(`.success`);
+    document.addEventListener(`keydown`, onMessageEscPress);
+    currentMessage.addEventListener(`click`, onMessageCloseClick);
+  };
 
-    currentMessage = main.querySelector('.success');
-    document.addEventListener('keydown', onMessageEscPress);
-    currentMessage.addEventListener('click', onMessageCloseClick);
-  }
-
-  function showErrorMessage() {
+  const showErrorMessage = () => {
     const message = errorMessageItem.cloneNode(true);
-    fragment.appendChild(message);
-    main.appendChild(fragment);
+    main.appendChild(message);
+    currentMessage = main.querySelector(`.error`);
+    errorButton = currentMessage.querySelector(`.error__button`);
+    document.addEventListener(`keydown`, onMessageEscPress);
+    currentMessage.addEventListener(`click`, onMessageCloseClick);
+    errorButton.addEventListener(`click`, onMessageCloseClick);
+  };
 
-    currentMessage = main.querySelector('.error');
-    errorButton = currentMessage.querySelector('.error__button');
-    document.addEventListener('keydown', onMessageEscPress);
-    currentMessage.addEventListener('click', onMessageCloseClick);
-    errorButton.addEventListener('click', onMessageCloseClick);
-  }
-
-  function onMessageEscPress(evt) {
+  const onMessageEscPress = (evt) => {
     window.util.isEscEvent(evt, closeMessage);
-  }
+  };
 
-  function onMessageCloseClick() {
+  const onMessageCloseClick = () => {
     closeMessage();
-  }
+  };
 
-  function closeMessage() {
-    const elemSuccess = main.querySelector('.success');
-    const elemError = main.querySelector('.error');
+  const closeMessage = () => {
+    const elemSuccess = main.querySelector(`.success`);
+    const elemError = main.querySelector(`.error`);
     if (elemSuccess) {
       elemSuccess.remove();
     }
     if (elemError) {
       elemError.remove();
     }
-    document.removeEventListener('keydown', onMessageEscPress);
-    currentMessage.removeEventListener('click', onMessageCloseClick);
-    if (errorButton && elemError !== null) {
-      errorButton.removeEventListener('click', onMessageCloseClick);
+    document.removeEventListener(`keydown`, onMessageEscPress);
+    currentMessage.removeEventListener(`click`, onMessageCloseClick);
+    if (errorButton) {
+      errorButton.removeEventListener(`click`, onMessageCloseClick);
     }
-  }
+  };
 
   window.uploadMessages = {
-    showSuccessMessage,
-    showErrorMessage,
-    closeMessage
+    showSuccess: showSuccessMessage,
+    showError: showErrorMessage,
   };
 })();
